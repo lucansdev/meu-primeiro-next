@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getVagaById, getVagas } from "@/lib/vagas";
 import BotaoSalvarVaga from "@/components/BotaoSalvarVaga";
-import FormCandidatura from "@/components/FormCandidatura";
 import type { Metadata } from "next";
 
 interface VagaPageProps {
@@ -93,11 +92,13 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
 
         <aside className="vaga-sidebar">
           <div className="sidebar-box">
-            <h3 style={{ fontSize: "1.2rem", marginBottom: "8px" }}>Candidatura Rápida</h3>
+            <h3 style={{ fontSize: "1.2rem", marginBottom: "8px" }}>Gostou da Oportunidade?</h3>
             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginBottom: "16px" }}>
-              Preencha seus dados abaixo para enviar seu perfil diretamente para a equipe da {vaga.empresa}.
+              Esta vaga foi publicada recentemente pela empresa {vaga.empresa}.
             </p>
-            <FormCandidatura vagaId={vaga.id} vagaTitulo={vaga.titulo} />
+            <Link href="/contato" className="button button-primary" style={{ width: "100%" }}>
+              Entrar em Contato
+            </Link>
           </div>
         </aside>
       </div>

@@ -27,7 +27,7 @@ a { color: inherit; }
 main { min-height: calc(100vh - 152px); }
 
 /* Layout Header & Footer */
-.cabecalho { border-bottom: 1px solid var(--line); background: rgba(247,245,239,.94); backdrop-filter: blur(10px); sticky; top: 0; z-index: 100; }
+.cabecalho { border-bottom: 1px solid var(--line); background: rgba(247,245,239,.94); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
 .header-inner, .footer-inner { width: min(1120px, calc(100% - 48px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .header-inner { min-height: 76px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 700; text-decoration: none; letter-spacing: -.03em; }
