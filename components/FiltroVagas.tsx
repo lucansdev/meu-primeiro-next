@@ -74,7 +74,7 @@ export default function FiltroVagas({ vagasIniciais }: FiltroVagasProps) {
           </div>
 
           <div className="input-group">
-            <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600, paddingBottom: "10px" }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--muted)", fontWeight: 700, paddingBottom: "10px" }}>
               {vagasFiltradas.length} {vagasFiltradas.length === 1 ? "vaga encontrada" : "vagas encontradas"}
             </span>
           </div>
@@ -82,10 +82,10 @@ export default function FiltroVagas({ vagasIniciais }: FiltroVagasProps) {
       </div>
 
       {vagasFiltradas.length === 0 ? (
-        <div className="sidebar-box" style={{ textAlign: "center", padding: "48px 24px" }}>
+        <div className="benefit-card" style={{ textAlign: "center", padding: "48px 24px" }}>
           <h3 style={{ fontSize: "1.2rem", marginBottom: "8px" }}>Nenhuma vaga encontrada</h3>
-          <p style={{ color: "var(--text-muted)", margin: 0 }}>
-            Tente pesquisar com outros termos ou redefinir os seletores de modalidade e senioridade.
+          <p style={{ color: "var(--muted)", margin: 0 }}>
+            Tente pesquisar por outros termos ou ajustar os filtros selecionados.
           </p>
         </div>
       ) : (
@@ -101,7 +101,7 @@ export default function FiltroVagas({ vagasIniciais }: FiltroVagasProps) {
                 <Link href={`/vagas/${vaga.id}`} className="vaga-title">
                   {vaga.titulo}
                 </Link>
-                <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", margin: "0 0 12px" }}>
+                <p style={{ color: "var(--muted)", fontSize: "0.9rem", margin: "0 0 12px" }}>
                   📍 {vaga.localizacao} • {vaga.publicadoEm}
                 </p>
                 <div className="vaga-tags">
