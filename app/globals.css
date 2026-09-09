@@ -1,19 +1,21 @@
+/* Alchemy T3 Official Design System Tokens */
 :root {
-  --bg-main: #090a0f;
-  --bg-surface: #12151e;
-  --bg-surface-hover: #191d2b;
-  --bg-card: #151824;
-  --border-color: #23293a;
-  --border-focus: #6366f1;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-primary: #6366f1;
-  --accent-primary-hover: #4f46e5;
-  --accent-glow: rgba(99, 102, 241, 0.25);
-  --accent-emerald: #10b981;
-  --accent-cyan: #06b6d4;
-  --accent-amber: #f59e0b;
+  --background: #F8F8F8;
+  --foreground: #0A0A12;
+  --dark: #0A0A12;
+  --light: #F8F8F8;
+  --primary: #FFD642;
+  --primary-hover: #e5bf3b;
+  --accent: #25E5C5;
+  --accent-hover: #1ed1b3;
+  --muted: #64748B;
+  --border-stroke: #E2E8F0;
+  --card-bg: #FFFFFF;
+  --card-hover: #FFFFFF;
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --cyan-bg: rgba(37, 229, 197, 0.12);
+  --amber-bg: rgba(255, 214, 66, 0.15);
 }
 
 * {
@@ -24,11 +26,23 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Custom Alchemy Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 5px;
+}
+
 body {
   margin: 0;
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -39,18 +53,18 @@ a {
 }
 
 main {
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 150px);
 }
 
-/* Header & Glassmorphism */
+/* Alchemy Header (Dark Navbar) */
 .cabecalho {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(9, 10, 15, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(10, 10, 18, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-inner, .footer-inner {
@@ -62,29 +76,30 @@ main {
 }
 
 .header-inner {
-  min-height: 72px;
+  min-height: 76px;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
+  color: #FFFFFF;
   letter-spacing: -0.02em;
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: var(--dark);
   font-weight: 900;
-  font-size: 1.1rem;
-  box-shadow: 0 0 16px var(--accent-glow);
+  font-size: 1.2rem;
+  box-shadow: 0 0 16px rgba(37, 229, 197, 0.3);
 }
 
 .nav-list {
@@ -96,35 +111,41 @@ main {
 }
 
 .nav-list a {
-  color: var(--text-secondary);
+  color: #94A3B8;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
   padding: 6px 0;
   position: relative;
 }
 
 .nav-list a:hover, .nav-list a:focus-visible {
-  color: var(--text-primary);
+  color: #FFFFFF;
 }
 
 .nav-list a.active {
-  color: var(--text-primary);
+  color: var(--primary);
   font-weight: 700;
 }
 
 .nav-list a.active::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--accent-primary);
+  background: var(--primary);
   border-radius: 2px;
 }
 
-/* Common Layout Containers */
+/* Layout Containers */
+.hero-wrapper {
+  background: var(--dark);
+  color: #FFFFFF;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .hero, .section, .page-section {
   width: min(1140px, calc(100% - 48px));
   margin: 0 auto;
@@ -136,28 +157,33 @@ main {
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   padding: 4px 12px;
   border-radius: 20px;
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  color: var(--accent-primary);
+  background: rgba(255, 214, 66, 0.15);
+  border: 1px solid rgba(255, 214, 66, 0.3);
+  color: var(--primary);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.eyebrow-dark {
+  background: rgba(37, 229, 197, 0.1);
+  border-color: rgba(37, 229, 197, 0.25);
+  color: var(--accent);
+}
+
 h1, h2, h3, h4 {
   margin-top: 0;
-  color: var(--text-primary);
   letter-spacing: -0.04em;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.6rem, 5.5vw, 4.6rem);
   font-weight: 900;
-  line-height: 1.08;
+  line-height: 1.06;
 }
 
 h2 {
@@ -166,14 +192,14 @@ h2 {
   line-height: 1.15;
 }
 
-/* Gradient Text Effect */
+/* Alchemy Gradient Text */
 .grad-text {
-  background: linear-gradient(135deg, #ffffff 30%, var(--accent-primary) 70%, var(--accent-cyan) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Buttons */
+/* Buttons Alchemy Style */
 .button {
   display: inline-flex;
   align-items: center;
@@ -189,47 +215,69 @@ h2 {
 }
 
 .button-primary {
-  background: var(--accent-primary);
-  color: #ffffff;
-  box-shadow: 0 4px 20px var(--accent-glow);
+  background: var(--primary);
+  color: var(--dark);
+  box-shadow: 0 4px 20px rgba(255, 214, 66, 0.25);
 }
 
 .button-primary:hover {
-  background: var(--accent-primary-hover);
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 24px rgba(255, 214, 66, 0.4);
+}
+
+.button-accent {
+  background: var(--accent);
+  color: var(--dark);
+  box-shadow: 0 4px 20px rgba(37, 229, 197, 0.25);
+}
+
+.button-accent:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
 }
 
 .button-secondary {
-  background: var(--bg-surface);
-  border-color: var(--border-color);
-  color: var(--text-primary);
+  background: #FFFFFF;
+  border: 1px solid var(--border-stroke);
+  color: var(--foreground);
 }
 
 .button-secondary:hover {
-  background: var(--bg-surface-hover);
-  border-color: var(--text-muted);
+  border-color: var(--muted);
+  background: #F1F5F9;
   transform: translateY(-1px);
 }
 
-.button-saved {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: var(--accent-emerald);
+.button-outline-dark {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
 }
 
-/* Hero Section */
+.button-outline-dark:hover {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.button-saved {
+  background: var(--cyan-bg);
+  border-color: rgba(37, 229, 197, 0.4);
+  color: #0d9488;
+}
+
+/* Hero Section Alchemy */
 .hero {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 60px;
   align-items: center;
-  padding: 80px 0 100px;
+  padding: 88px 0 108px;
 }
 
 .hero-text {
   font-size: 1.15rem;
-  color: var(--text-secondary);
+  color: #94A3B8;
   max-width: 580px;
   margin-bottom: 32px;
 }
@@ -246,29 +294,29 @@ h2 {
   gap: 20px;
   margin-top: 48px;
   padding-top: 32px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-item h3 {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 900;
   margin: 0 0 4px;
-  color: var(--accent-primary);
+  color: var(--accent);
 }
 
 .stat-item p {
   margin: 0;
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: #94A3B8;
 }
 
-/* Decorative Hero Element */
+/* Hero Card Preview */
 .hero-visual {
   position: relative;
   aspect-ratio: 1;
   border-radius: 24px;
-  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15), transparent 70%);
-  border: 1px solid var(--border-color);
+  background: radial-gradient(circle at 50% 50%, rgba(37, 229, 197, 0.15), transparent 70%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -277,32 +325,21 @@ h2 {
   overflow: hidden;
 }
 
-.hero-glow-circle {
-  position: absolute;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: var(--accent-primary);
-  filter: blur(90px);
-  opacity: 0.3;
-}
-
 .hero-card-preview {
   position: relative;
   z-index: 10;
-  background: rgba(18, 21, 30, 0.9);
-  border: 1px solid var(--border-color);
+  background: rgba(18, 18, 30, 0.9);
+  border: 1px solid rgba(255, 214, 66, 0.3);
   border-radius: 16px;
   padding: 24px;
   width: 100%;
   backdrop-filter: blur(12px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
 
-/* Feature & Steps Grid */
+/* Steps & Cards (Alchemy Light Section) */
 .steps {
-  padding: 80px 0;
-  border-top: 1px solid var(--border-color);
+  padding: 88px 0;
 }
 
 .benefit-grid {
@@ -312,51 +349,53 @@ h2 {
 }
 
 .benefit-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-stroke);
   border-radius: 16px;
   padding: 32px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 .benefit-card:hover {
-  border-color: var(--border-focus);
+  border-color: var(--primary);
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
 .benefit-card span {
   display: inline-grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--accent-primary);
-  font-weight: 800;
-  font-size: 0.9rem;
+  background: var(--amber-bg);
+  color: #b45309;
+  font-weight: 900;
+  font-size: 0.95rem;
   margin-bottom: 24px;
 }
 
 .benefit-card h3 {
   font-size: 1.3rem;
   margin-bottom: 12px;
+  color: var(--foreground);
 }
 
 .benefit-card p {
-  color: var(--text-secondary);
+  color: var(--muted);
   font-size: 0.95rem;
   margin: 0;
 }
 
-/* Search & Filter Box */
+/* Search & Filter Box (Alchemy Style) */
 .search-filter-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-stroke);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 40px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .filter-grid {
@@ -375,7 +414,7 @@ h2 {
 .input-group label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -383,18 +422,19 @@ h2 {
 .input-control, .select-control {
   width: 100%;
   padding: 12px 16px;
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
+  background: #F1F5F9;
+  border: 1px solid var(--border-stroke);
   border-radius: 10px;
-  color: var(--text-primary);
+  color: var(--foreground);
   font-size: 0.95rem;
   outline: none;
   transition: all 0.2s ease;
 }
 
 .input-control:focus, .select-control:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  border-color: var(--accent);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(37, 229, 197, 0.25);
 }
 
 /* Vagas Grid & Cards */
@@ -405,22 +445,22 @@ h2 {
 }
 
 .vaga-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-stroke);
   border-radius: 16px;
   padding: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 
 .vaga-card:hover {
-  border-color: var(--accent-primary);
-  background: var(--bg-surface-hover);
+  border-color: var(--primary);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 .vaga-main-info {
@@ -438,20 +478,20 @@ h2 {
 .vaga-empresa {
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 .vaga-title {
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--foreground);
   margin-bottom: 8px;
   display: inline-block;
   transition: color 0.2s;
 }
 
 .vaga-title:hover {
-  color: var(--accent-primary);
+  color: #d97706;
 }
 
 .vaga-tags {
@@ -468,21 +508,21 @@ h2 {
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  background: #F1F5F9;
+  color: var(--muted);
+  border: 1px solid var(--border-stroke);
 }
 
 .badge-modality {
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--accent-cyan);
-  border-color: rgba(6, 182, 212, 0.3);
+  background: var(--cyan-bg);
+  color: #0f766e;
+  border-color: rgba(37, 229, 197, 0.4);
 }
 
 .badge-seniority {
-  background: rgba(245, 158, 11, 0.12);
-  color: var(--accent-amber);
-  border-color: rgba(245, 158, 11, 0.3);
+  background: var(--amber-bg);
+  color: #b45309;
+  border-color: rgba(255, 214, 66, 0.4);
 }
 
 /* Vaga Detalhe */
@@ -493,59 +533,62 @@ h2 {
 }
 
 .vaga-detail-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-stroke);
   border-radius: 20px;
   padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
 .sidebar-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid var(--border-stroke);
   border-radius: 20px;
   padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
-/* Callout Section */
+/* Callout Section (Alchemy Dark Accent) */
 .callout {
   margin-bottom: 80px;
   padding: 64px;
-  background: linear-gradient(135deg, var(--bg-surface), #1a1e2f);
-  border: 1px solid var(--border-color);
+  background: var(--dark);
+  color: #FFFFFF;
   border-radius: 24px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 20px 40px rgba(10, 10, 18, 0.4);
 }
 
 .text-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--accent-primary);
+  color: var(--primary);
   font-weight: 700;
   transition: gap 0.2s;
 }
 
 .text-link:hover {
   gap: 12px;
-  color: var(--accent-cyan);
+  color: var(--accent);
 }
 
-/* Footer */
+/* Footer (Alchemy Dark) */
 .rodape {
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-main);
-  padding: 32px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--dark);
+  padding: 36px 0;
+  color: #94A3B8;
 }
 
 .footer-inner {
-  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
-/* Skeleton Loading */
+/* Skeleton Loading Alchemy */
 .skeleton {
-  background: linear-gradient(90deg, #12151e 25%, #1d2232 50%, #12151e 75%);
+  background: linear-gradient(90deg, #E2E8F0 25%, #CBD5E1 50%, #E2E8F0 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
   border-radius: 10px;

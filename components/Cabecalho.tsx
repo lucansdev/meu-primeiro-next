@@ -18,9 +18,11 @@ export default function Cabecalho() {
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="Leque de Vagas, ir para o início">
           <span className="brand-mark" aria-hidden="true">
-            L
+            ⚗
           </span>
-          <span>Leque de Vagas</span>
+          <span>
+            Leque <span style={{ color: "var(--primary)" }}>de Vagas</span>
+          </span>
         </Link>
         <nav aria-label="Navegação principal">
           <ul className="nav-list">
