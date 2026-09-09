@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { href: "/", label: "Início" },
@@ -8,18 +11,29 @@ const navigation = [
 ];
 
 export default function Cabecalho() {
+  const pathname = usePathname();
+
   return (
     <header className="cabecalho">
       <div className="header-inner">
         <Link className="brand" href="/" aria-label="Leque de Vagas, ir para o início">
-          <span className="brand-mark" aria-hidden="true">L</span>
+          <span className="brand-mark" aria-hidden="true">
+            L
+          </span>
           <span>Leque de Vagas</span>
         </Link>
         <nav aria-label="Navegação principal">
           <ul className="nav-list">
-            {navigation.map((item) => (
-              <li key={item.href}><Link href={item.href}>{item.label}</Link></li>
-            ))}
+            {navigation.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <li key={item.href}>
+                  <Link href={item.href} className={isActive ? "active" : ""}>
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
