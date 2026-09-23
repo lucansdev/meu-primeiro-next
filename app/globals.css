@@ -525,6 +525,28 @@ h2 {
   border-color: rgba(255, 214, 66, 0.4);
 }
 
+.badge-iniciante {
+  background: var(--success-bg);
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.botao-ver-mais {
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f766e;
+  cursor: pointer;
+}
+
+.botao-ver-mais:hover {
+  text-decoration: underline;
+}
+
 /* Vaga Detalhe */
 .vaga-detail-container {
   display: grid;

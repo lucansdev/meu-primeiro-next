@@ -1,16 +1,25 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getVagaById, getVagas } from "@/lib/vagas";
+import { vagas } from "@/data/vagas";
 import BotaoSalvarVaga from "@/components/BotaoSalvarVaga";
+import BotaoCopiarLink from "@/components/BotaoCopiarLink";
+import CardDeVaga from "@/components/CardDeVaga";
+import DescricaoDaVaga from "@/components/DescricaoDaVaga";
+// Frente 3: descomentar quando o FormularioDeCandidatura for entregue (prop combinada: tituloDaVaga).
+// import FormularioDeCandidatura from "@/components/FormularioDeCandidatura";
 import type { Metadata } from "next";
 
 interface VagaPageProps {
   params: Promise<{ id: string }>;
 }
 
+function buscarVaga(id: string) {
+  return vagas.find((vaga) => vaga.id === id);
+}
+
 export async function generateMetadata({ params }: VagaPageProps): Promise<Metadata> {
   const { id } = await params;
-  const vaga = await getVagaById(id);
+  const vaga = buscarVaga(id);
 
   if (!vaga) {
     return { title: "Vaga não encontrada | Leque de Vagas" };
@@ -23,7 +32,6 @@ export async function generateMetadata({ params }: VagaPageProps): Promise<Metad
 }
 
 export async function generateStaticParams() {
-  const vagas = await getVagas();
   return vagas.map((vaga) => ({
     id: vaga.id,
   }));
@@ -31,11 +39,13 @@ export async function generateStaticParams() {
 
 export default async function VagaDetalhePage({ params }: VagaPageProps) {
   const { id } = await params;
-  const vaga = await getVagaById(id);
+  const vaga = buscarVaga(id);
 
   if (!vaga) {
     notFound();
   }
+
+  const outrasDaArea = vagas.filter((v) => v.area === vaga.area && v.id !== vaga.id);
 
   return (
     <section className="page-section">
@@ -49,8 +59,10 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
         <div className="vaga-detail-card">
           <div className="vaga-header">
             <span className="vaga-empresa">{vaga.empresa}</span>
+            <span className="badge">{vaga.area}</span>
             <span className="badge badge-modality">{vaga.modalidade}</span>
             <span className="badge badge-seniority">{vaga.senioridade}</span>
+            {vaga.aceitaIniciante && <span className="badge badge-iniciante">Aceita iniciante</span>}
           </div>
           <h1 style={{ fontSize: "2.2rem", marginBottom: "16px" }}>{vaga.titulo}</h1>
           <p style={{ color: "var(--muted)", fontSize: "1rem", marginBottom: "24px" }}>
@@ -59,12 +71,13 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
 
           <div style={{ display: "flex", gap: "12px", marginBottom: "36px" }}>
             <BotaoSalvarVaga vagaId={vaga.id} />
+            <BotaoCopiarLink />
           </div>
 
           <hr style={{ border: "none", borderTop: "1px solid var(--line)", margin: "32px 0" }} />
 
           <h2 style={{ fontSize: "1.4rem", marginBottom: "12px" }}>Sobre a vaga</h2>
-          <p style={{ lineHeight: 1.7, color: "var(--ink)", marginBottom: "32px" }}>{vaga.descricao}</p>
+          <DescricaoDaVaga texto={vaga.descricao} />
 
           <h2 style={{ fontSize: "1.4rem", marginBottom: "12px" }}>Requisitos</h2>
           <ul style={{ paddingLeft: "20px", marginBottom: "32px", lineHeight: 1.8 }}>
@@ -100,8 +113,20 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
               Entrar em Contato
             </Link>
           </div>
+          {/* <FormularioDeCandidatura tituloDaVaga={vaga.titulo} /> */}
         </aside>
       </div>
+
+      {outrasDaArea.length > 0 && (
+        <div style={{ marginTop: "56px" }}>
+          <h2 style={{ fontSize: "1.4rem", marginBottom: "20px" }}>Outras vagas de {vaga.area}</h2>
+          <div className="vagas-grid">
+            {outrasDaArea.map((outra) => (
+              <CardDeVaga key={outra.id} vaga={outra} />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

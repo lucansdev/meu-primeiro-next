@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Vaga } from "@/lib/vagas";
+import type { Vaga } from "@/data/vagas";
 import BotaoSalvarVaga from "./BotaoSalvarVaga";
 
 interface FiltroVagasProps {
