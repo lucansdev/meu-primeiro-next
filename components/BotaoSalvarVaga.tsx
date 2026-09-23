@@ -19,6 +19,7 @@ export default function BotaoSalvarVaga({ vagaId }: BotaoSalvarVagaProps) {
       onClick={toggleSalvar}
       className={`button ${salvo ? "button-saved" : "button-secondary"}`}
       aria-label={salvo ? "Remover vaga dos salvos" : "Salvar vaga"}
+      data-vaga-id={vagaId}
     >
       {salvo ? "✓ Vaga Salva" : "🔖 Salvar Vaga"}
     </button>

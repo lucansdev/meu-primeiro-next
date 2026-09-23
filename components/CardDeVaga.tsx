@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Vaga } from "@/data/vagas";
+import type { Vaga } from "@/lib/tipos";
 
 interface CardDeVagaProps {
   vaga: Vaga;

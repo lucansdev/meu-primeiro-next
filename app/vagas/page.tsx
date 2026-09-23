@@ -1,18 +1,12 @@
 import { Suspense } from "react";
-import { getVagas } from "@/lib/vagas";
-import FiltroVagas from "@/components/FiltroVagas";
-import VagasLoading from "./loading";
+import ListagemDeVagas from "@/components/ListagemDeVagas";
+import NumerosDoCatalogo from "@/components/NumerosDoCatalogo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Vagas de Tecnologia | Leque de Vagas",
   description: "Explore vagas de tecnologia selecionadas para quem está em transição de carreira ou buscando primeiros desafios.",
 };
-
-async function ListaVagasContainer() {
-  const vagas = await getVagas();
-  return <FiltroVagas vagasIniciais={vagas} />;
-}
 
 export default function VagasPage() {
   return (
@@ -25,8 +19,20 @@ export default function VagasPage() {
         </p>
       </div>
 
-      <Suspense fallback={<VagasLoading />}>
-        <ListaVagasContainer />
+      <Suspense fallback={<div className="skeleton" style={{ width: "310px", height: "25px", marginBottom: "24px" }} />}>
+        <NumerosDoCatalogo />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="vagas-grid" aria-label="Carregando vagas">
+            <div className="skeleton skeleton-card" />
+            <div className="skeleton skeleton-card" />
+            <div className="skeleton skeleton-card" />
+          </div>
+        }
+      >
+        <ListagemDeVagas />
       </Suspense>
     </section>
   );

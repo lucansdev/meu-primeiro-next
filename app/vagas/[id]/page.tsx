@@ -1,25 +1,20 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { vagas } from "@/data/vagas";
+import { buscarVaga, listarVagas } from "@/lib/api";
 import BotaoSalvarVaga from "@/components/BotaoSalvarVaga";
 import BotaoCopiarLink from "@/components/BotaoCopiarLink";
 import CardDeVaga from "@/components/CardDeVaga";
 import DescricaoDaVaga from "@/components/DescricaoDaVaga";
-// Frente 3: descomentar quando o FormularioDeCandidatura for entregue (prop combinada: tituloDaVaga).
-// import FormularioDeCandidatura from "@/components/FormularioDeCandidatura";
+import FormularioDeCandidatura from "@/components/FormularioDeCandidatura";
 import type { Metadata } from "next";
 
 interface VagaPageProps {
   params: Promise<{ id: string }>;
 }
 
-function buscarVaga(id: string) {
-  return vagas.find((vaga) => vaga.id === id);
-}
-
 export async function generateMetadata({ params }: VagaPageProps): Promise<Metadata> {
   const { id } = await params;
-  const vaga = buscarVaga(id);
+  const vaga = await buscarVaga(id);
 
   if (!vaga) {
     return { title: "Vaga não encontrada | Leque de Vagas" };
@@ -32,6 +27,8 @@ export async function generateMetadata({ params }: VagaPageProps): Promise<Metad
 }
 
 export async function generateStaticParams() {
+  const vagas = await listarVagas();
+
   return vagas.map((vaga) => ({
     id: vaga.id,
   }));
@@ -39,12 +36,13 @@ export async function generateStaticParams() {
 
 export default async function VagaDetalhePage({ params }: VagaPageProps) {
   const { id } = await params;
-  const vaga = buscarVaga(id);
+  const vaga = await buscarVaga(id);
 
   if (!vaga) {
     notFound();
   }
 
+  const vagas = await listarVagas();
   const outrasDaArea = vagas.filter((v) => v.area === vaga.area && v.id !== vaga.id);
 
   return (
@@ -113,7 +111,7 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
               Entrar em Contato
             </Link>
           </div>
-          {/* <FormularioDeCandidatura tituloDaVaga={vaga.titulo} /> */}
+          <FormularioDeCandidatura tituloDaVaga={vaga.titulo} />
         </aside>
       </div>
 
