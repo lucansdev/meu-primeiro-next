@@ -5,8 +5,9 @@ Catálogo de oportunidades construído com Next.js App Router.
 ## Dados externos e atualização
 
 As vagas e empresas ficam nos arquivos `dados/vagas.json` e `dados/empresas.json`.
-Publique a pasta `dados` no repositório remoto da equipe e copie a URL **Raw** da
-pasta para um arquivo `.env.local`:
+Sem configuração extra, a aplicação usa esses arquivos locais, inclusive durante
+o build e o deploy. Opcionalmente, publique a pasta `dados` no repositório remoto
+da equipe e copie a URL **Raw** para um arquivo `.env.local`:
 
 ```bash
 DADOS_URL=https://raw.githubusercontent.com/SUA-EQUIPE/leque-de-vagas/main/dados

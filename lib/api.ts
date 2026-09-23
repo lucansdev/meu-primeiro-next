@@ -1,4 +1,6 @@
 import type { Candidatura, Empresa, Vaga } from "@/lib/tipos";
+import vagasLocais from "@/dados/vagas.json";
+import empresasLocais from "@/dados/empresas.json";
 
 const DADOS_URL = (process.env.DADOS_URL ?? "").replace(/\/$/, "");
 const REVALIDACAO_EM_SEGUNDOS = 60 * 60;
@@ -6,10 +8,14 @@ const criadas: Vaga[] = [];
 const arquivadas = new Set<string>();
 const candidaturas: Candidatura[] = [];
 const empresasEditadas = new Map<string, Empresa>();
+const dadosLocais: Record<string, unknown> = {
+  "vagas.json": vagasLocais,
+  "empresas.json": empresasLocais,
+};
 
 async function buscarDados<T>(caminho: string, tag: string): Promise<T> {
   if (!DADOS_URL) {
-    throw new Error("Defina DADOS_URL com a URL pública da pasta dados do repositório.");
+    return dadosLocais[caminho] as T;
   }
 
   const resposta = await fetch(`${DADOS_URL}/${caminho}`, {
