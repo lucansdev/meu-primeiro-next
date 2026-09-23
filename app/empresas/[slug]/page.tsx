@@ -48,6 +48,7 @@ export default async function EmpresaPage({ params }: EmpresaPageProps) {
         <p className="eyebrow">Empresa parceira</p>
         <h1>{empresa.nome}</h1>
         <p className="hero-text">{empresa.localizacao}</p>
+        <Link href={`/empresas/${empresa.id}/editar`} className="button button-secondary">Editar empresa</Link>
       </div>
 
       <AbasDaEmpresa empresa={empresa} vagas={vagas} />

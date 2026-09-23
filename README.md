@@ -21,6 +21,15 @@ e garante que uma vaga nova apareça no site publicado em, no pior caso, **60
 minutos**. As tags `vagas` e `empresas` já deixam o catálogo pronto para
 revalidação imediata por Server Action em uma próxima aula.
 
+## Escritas da aula 05
+
+Criar, editar, candidatar-se e arquivar funcionam por Server Actions, sem rotas
+em `app/api`. Como a fonte base é um JSON Raw somente de leitura, os dados
+escritos vivem na memória do processo em `lib/api.ts`. Eles aparecem enquanto o
+servidor local continua ligado e somem ao reiniciá-lo; em deploy com múltiplas
+instâncias esse comportamento também não é persistente. A próxima aula troca
+apenas essa camada por um banco de dados.
+
 ## Executar localmente
 
 ```bash

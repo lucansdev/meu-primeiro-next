@@ -25,3 +25,17 @@ export interface Empresa {
   localizacao: string;
   site: string;
 }
+
+export interface Candidatura {
+  vagaId: string;
+  nome: string;
+  email: string;
+  habilidades: string[];
+}
+
+export type Estado = {
+  ok: boolean;
+  erros: Record<string, string>;
+  valores: Record<string, string>;
+  mensagem?: string;
+};

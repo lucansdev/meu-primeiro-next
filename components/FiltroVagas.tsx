@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Vaga } from "@/lib/tipos";
 import BotaoSalvarVaga from "./BotaoSalvarVaga";
+import AcaoArquivarVaga from "./AcaoArquivarVaga";
 
 interface FiltroVagasProps {
   vagasIniciais: Vaga[];
@@ -115,6 +116,7 @@ export default function FiltroVagas({ vagasIniciais }: FiltroVagasProps) {
 
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                 <BotaoSalvarVaga vagaId={vaga.id} />
+                <AcaoArquivarVaga vagaId={vaga.id} />
                 <Link href={`/vagas/${vaga.id}`} className="button button-primary">
                   Ver Vaga →
                 </Link>

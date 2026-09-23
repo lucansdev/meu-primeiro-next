@@ -7,6 +7,7 @@ import CardDeVaga from "@/components/CardDeVaga";
 import DescricaoDaVaga from "@/components/DescricaoDaVaga";
 import FormularioDeCandidatura from "@/components/FormularioDeCandidatura";
 import type { Metadata } from "next";
+import AcaoArquivarVaga from "@/components/AcaoArquivarVaga";
 
 interface VagaPageProps {
   params: Promise<{ id: string }>;
@@ -70,6 +71,7 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
           <div style={{ display: "flex", gap: "12px", marginBottom: "36px" }}>
             <BotaoSalvarVaga vagaId={vaga.id} />
             <BotaoCopiarLink />
+            <AcaoArquivarVaga vagaId={vaga.id} />
           </div>
 
           <hr style={{ border: "none", borderTop: "1px solid var(--line)", margin: "32px 0" }} />
@@ -111,7 +113,7 @@ export default async function VagaDetalhePage({ params }: VagaPageProps) {
               Entrar em Contato
             </Link>
           </div>
-          <FormularioDeCandidatura tituloDaVaga={vaga.titulo} />
+          <FormularioDeCandidatura tituloDaVaga={vaga.titulo} vagaId={vaga.id} />
         </aside>
       </div>
 

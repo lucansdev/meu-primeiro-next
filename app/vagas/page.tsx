@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import ListagemDeVagas from "@/components/ListagemDeVagas";
 import NumerosDoCatalogo from "@/components/NumerosDoCatalogo";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Vagas de Tecnologia | Leque de Vagas",
@@ -17,6 +18,7 @@ export default function VagasPage() {
         <p className="hero-text" style={{ marginBottom: "40px" }}>
           Vagas selecionadas especialmente para pessoas em transição de carreira, iniciantes e níveis júnior/pleno.
         </p>
+        <Link href="/vagas/nova" className="button button-primary" style={{ marginBottom: "32px" }}>Publicar vaga</Link>
       </div>
 
       <Suspense fallback={<div className="skeleton" style={{ width: "310px", height: "25px", marginBottom: "24px" }} />}>
