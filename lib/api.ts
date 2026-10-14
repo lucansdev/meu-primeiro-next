@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { Empresa, Vaga } from "@/lib/tipos";
 
@@ -50,6 +51,7 @@ function paraEmpresa(empresa: {
 }
 
 export async function listarVagas() {
+  await connection();
   const vagas = await prisma.vaga.findMany({
     where: { arquivadaEm: null },
     include: { empresa: { select: { nome: true } } },
@@ -60,6 +62,7 @@ export async function listarVagas() {
 }
 
 export async function buscarVaga(id: string) {
+  await connection();
   const vaga = await prisma.vaga.findFirst({
     where: { id, arquivadaEm: null },
     include: { empresa: { select: { nome: true } } },
@@ -69,11 +72,13 @@ export async function buscarVaga(id: string) {
 }
 
 export async function listarEmpresas() {
+  await connection();
   const empresas = await prisma.empresa.findMany({ orderBy: { nome: "asc" } });
   return empresas.map(paraEmpresa);
 }
 
 export async function buscarEmpresaPorId(id: string) {
+  await connection();
   const empresa = await prisma.empresa.findUnique({ where: { id } });
   return empresa ? paraEmpresa(empresa) : undefined;
 }

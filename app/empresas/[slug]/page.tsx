@@ -2,15 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AbasDaEmpresa from "@/components/AbasDaEmpresa";
-import { buscarEmpresaPorId, listarEmpresas, listarVagas } from "@/lib/api";
+import { buscarEmpresaPorId, listarVagas } from "@/lib/api";
 import { podeEditarEmpresa } from "@/lib/autorizacao";
 
 interface EmpresaPageProps {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  return (await listarEmpresas()).map((empresa) => ({ slug: empresa.id }));
 }
 
 export async function generateMetadata({ params }: EmpresaPageProps): Promise<Metadata> {

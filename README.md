@@ -20,7 +20,7 @@ As Server Actions repetem as verificações de autorização no servidor; escond
 3. Instale as novas dependências:
 
    ```bash
-   npm install
+   npm ci
    ```
 
 4. Gere o cliente do Prisma, aplique a migração e carregue o catálogo inicial:
@@ -42,3 +42,10 @@ Depois, crie uma conta em `/cadastro`. Ao selecionar o perfil **Empresa**, uma e
 ## Deploy
 
 No ambiente de hospedagem, configure `DATABASE_URL` e `AUTH_SECRET` nas variáveis de ambiente. Antes do primeiro deploy que usa o banco, execute `npm run db:deploy` em um ambiente com acesso à base. O banco inicial pode ser preenchido uma única vez com `npm run db:seed`.
+
+
+O comando `npm run build` gera o cliente Prisma antes de executar o build do Next.js. Os detalhes de vagas e empresas são renderizados por requisição; o build não enumera registros do banco. O `package-lock.json` deve ser versionado junto de qualquer mudança de dependências. O GitHub Actions valida instalação limpa, lint e build em cada PR e em pushes para `main`.
+
+Na Vercel, use o preset Next.js, instalação `npm ci` e build `npm run build`. Configure `AUTH_URL` com a URL HTTPS da aplicação caso ela seja definida explicitamente; não use o endereço local em produção. `DATABASE_URL` e `AUTH_SECRET` precisam estar configuradas no ambiente publicado. Build aprovado não comprova conexão com banco nem funcionamento de login: valide cadastro, login, publicação de vaga e candidatura após aplicar a migração. Não execute seed a cada build.
+
+Veja [a explicação de cada commit e o processo de revisão](docs/HISTORICO.md).
