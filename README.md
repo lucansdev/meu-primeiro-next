@@ -2,41 +2,43 @@
 
 Catálogo de oportunidades construído com Next.js App Router.
 
-## Dados externos e atualização
+## Backend e autenticação
 
-As vagas e empresas ficam nos arquivos `dados/vagas.json` e `dados/empresas.json`.
-Sem configuração extra, a aplicação usa esses arquivos locais, inclusive durante
-o build e o deploy. Opcionalmente, publique a pasta `dados` no repositório remoto
-da equipe e copie a URL **Raw** para um arquivo `.env.local`:
+O catálogo agora usa PostgreSQL do Supabase por meio do Prisma. Vagas, empresas, usuários e candidaturas são persistidos no banco; as leituras não dependem mais de variáveis em memória.
 
-```bash
-DADOS_URL=https://raw.githubusercontent.com/SUA-EQUIPE/leque-de-vagas/main/dados
-```
+A autenticação usa credenciais com senha em hash e dois papéis:
 
-Use `.env.example` como referência. A aplicação busca essa fonte somente em
-`lib/api.ts`; páginas e componentes chamam as funções dessa camada.
+- **Pessoa candidata:** pode se candidatar e consultar as próprias candidaturas em `/painel`.
+- **Empresa:** possui uma única empresa, pode editar somente seu perfil, publicar vagas, arquivar somente as próprias vagas e acompanhar o total de candidaturas no painel.
 
-Cada consulta permanece em cache por **uma hora** (`revalidate: 3600`). Essa é
-uma escolha adequada para um catálogo de vagas: reduz chamadas à fonte externa
-e garante que uma vaga nova apareça no site publicado em, no pior caso, **60
-minutos**. As tags `vagas` e `empresas` já deixam o catálogo pronto para
-revalidação imediata por Server Action em uma próxima aula.
+As Server Actions repetem as verificações de autorização no servidor; esconder um botão na tela não é a única barreira de acesso.
 
-## Escritas da aula 05
+## Configuração local
 
-Criar, editar, candidatar-se e arquivar funcionam por Server Actions, sem rotas
-em `app/api`. Como a fonte base é um JSON Raw somente de leitura, os dados
-escritos vivem na memória do processo em `lib/api.ts`. Eles aparecem enquanto o
-servidor local continua ligado e somem ao reiniciá-lo; em deploy com múltiplas
-instâncias esse comportamento também não é persistente. A próxima aula troca
-apenas essa camada por um banco de dados.
+1. Crie um projeto no Supabase e obtenha a string de conexão PostgreSQL.
+2. Copie `.env.example` para `.env.local` e preencha `DATABASE_URL` e `AUTH_SECRET` localmente. Nunca versione ou compartilhe esses valores.
+3. Instale as novas dependências:
 
-## Executar localmente
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install
-npm run dev
-```
+4. Gere o cliente do Prisma, aplique a migração e carregue o catálogo inicial:
 
-Antes de executar `npm run build`, configure `DADOS_URL` com a URL Raw pública;
-as páginas de detalhe são pré-geradas a partir dessa fonte.
+   ```bash
+   npm run db:generate
+   npm run db:deploy
+   npm run db:seed
+   ```
+
+5. Inicie a aplicação:
+
+   ```bash
+   npm run dev
+   ```
+
+Depois, crie uma conta em `/cadastro`. Ao selecionar o perfil **Empresa**, uma empresa vinculada à conta é criada automaticamente.
+
+## Deploy
+
+No ambiente de hospedagem, configure `DATABASE_URL` e `AUTH_SECRET` nas variáveis de ambiente. Antes do primeiro deploy que usa o banco, execute `npm run db:deploy` em um ambiente com acesso à base. O banco inicial pode ser preenchido uma única vez com `npm run db:seed`.
