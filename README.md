@@ -4,8 +4,11 @@ Catálogo de oportunidades construído com Next.js App Router.
 
 # Desenvolvedores
 João Victor Araújo de Sales Mendes
+
 Raul Cabral Caxeta
+
 Johann Bezerra de Andrade
+
 Lucas Andrade Nascimento
 
 ## Backend e autenticação
