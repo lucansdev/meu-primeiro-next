@@ -2,6 +2,12 @@
 
 Catálogo de oportunidades construído com Next.js App Router.
 
+# Desenvolvedores
+João Victor Araújo de Sales Mendes
+Raul Cabral Caxeta
+Johann Bezerra de Andrade
+Lucas Andrade Nascimento
+
 ## Backend e autenticação
 
 O catálogo agora usa PostgreSQL do Supabase por meio do Prisma. Vagas, empresas, usuários e candidaturas são persistidos no banco; as leituras não dependem mais de variáveis em memória.
