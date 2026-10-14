@@ -23,11 +23,6 @@ export async function generateMetadata({ params }: VagaPageProps): Promise<Metad
   return { title: `${vaga.titulo} na ${vaga.empresa} | Leque de Vagas`, description: vaga.descricao };
 }
 
-export async function generateStaticParams() {
-  const vagas = await listarVagas();
-  return vagas.map((vaga) => ({ id: vaga.id }));
-}
-
 export default async function VagaDetalhePage({ params }: VagaPageProps) {
   const { id } = await params;
   const vaga = await buscarVaga(id);
