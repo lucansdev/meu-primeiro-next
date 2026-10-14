@@ -1,62 +1,44 @@
 # Leque de Vagas
 
-Projeto desenvolvido para o Desafio 01 de Introdução ao Next.js. O Leque de Vagas é uma ideia de site para pessoas em transição de carreira que desejam encontrar caminhos e oportunidades na área de tecnologia.
+Catálogo de oportunidades construído com Next.js App Router.
 
-## Tecnologias
+## Backend e autenticação
 
-- Next.js 16.3.1 com App Router
-- React 19 e TypeScript
-- CSS comum em `app/globals.css`
-- ESLint
+O catálogo agora usa PostgreSQL do Supabase por meio do Prisma. Vagas, empresas, usuários e candidaturas são persistidos no banco; as leituras não dependem mais de variáveis em memória.
 
-## Rotas
+A autenticação usa credenciais com senha em hash e dois papéis:
 
-- `/` — apresentação do projeto
-- `/sobre` — apresentação do Lucas e seus objetivos para o semestre
-- `/contato` — convite para criar conexões
+- **Pessoa candidata:** pode se candidatar e consultar as próprias candidaturas em `/painel`.
+- **Empresa:** possui uma única empresa, pode editar somente seu perfil, publicar vagas, arquivar somente as próprias vagas e acompanhar o total de candidaturas no painel.
 
-## Requisitos do desafio
+As Server Actions repetem as verificações de autorização no servidor; esconder um botão na tela não é a única barreira de acesso.
 
-- [x] Node.js e npm configurados
-- [x] Projeto criado com Next.js e App Router
-- [x] Componente `Cabecalho` em arquivo próprio e usado no layout
-- [x] Duas rotas principais ligadas por `next/link`
-- [x] Rota extra `/contato`
-- [x] Componente `Rodape` reutilizado no layout
-- [x] Metadata configurada
-- [x] Build confirmado após a primeira execução local
-- [ ] Repositório público criado no GitHub
-- [ ] Projeto publicado na Vercel
+## Configuração local
 
-## Como executar
+1. Crie um projeto no Supabase e obtenha a string de conexão PostgreSQL.
+2. Copie `.env.example` para `.env.local` e preencha `DATABASE_URL` e `AUTH_SECRET` localmente. Nunca versione ou compartilhe esses valores.
+3. Instale as novas dependências:
 
-```bash
-npm install
-npm run dev
-```
+   ```bash
+   npm install
+   ```
 
-Para gerar a versão de produção:
+4. Gere o cliente do Prisma, aplique a migração e carregue o catálogo inicial:
 
-```bash
-npm run build
-```
+   ```bash
+   npm run db:generate
+   npm run db:deploy
+   npm run db:seed
+   ```
 
-## Ambiente usado
+5. Inicie a aplicação:
 
-- Node.js: `v22.19.0`
-- npm: `10.9.3`
+   ```bash
+   npm run dev
+   ```
 
-### Prints do terminal
+Depois, crie uma conta em `/cadastro`. Ao selecionar o perfil **Empresa**, uma empresa vinculada à conta é criada automaticamente.
 
-> Adicione aqui os prints dos comandos `node -v` e `npm -v` antes de entregar.
+## Deploy
 
-## O que é um componente? *(preencher com minhas palavras antes da entrega)*
-
-> Escreva aqui, com suas palavras, o que você entendeu sobre componentes e por que usar um `Cabecalho` uma única vez no layout é melhor do que copiá-lo em cada página.
-
-## Entrega
-
-- Link do repositório público: **[adicionar após criar no GitHub]**
-- Link do site publicado na Vercel: **[adicionar após publicar]**
-- Integrantes da equipe: **[adicionar nomes aqui]**
-- O que foi mais difícil: **[adicionar sua resposta aqui]**
+No ambiente de hospedagem, configure `DATABASE_URL` e `AUTH_SECRET` nas variáveis de ambiente. Antes do primeiro deploy que usa o banco, execute `npm run db:deploy` em um ambiente com acesso à base. O banco inicial pode ser preenchido uma única vez com `npm run db:seed`.

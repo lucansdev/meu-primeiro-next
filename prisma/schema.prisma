@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Papel {
+  CANDIDATO
+  EMPRESA
+}
+
+model Usuario {
+  id           String        @id @default(cuid())
+  nome         String
+  email        String        @unique
+  senhaHash    String
+  papel        Papel
+  empresa      Empresa?
+  candidaturas Candidatura[]
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+}
+
+model Empresa {
+  id           String   @id @default(cuid())
+  nome         String   @unique
+  descricao    String   @default("")
+  localizacao  String   @default("")
+  site         String   @default("")
+  proprietario Usuario? @relation(fields: [proprietarioId], references: [id], onDelete: SetNull)
+  proprietarioId String? @unique
+  vagas        Vaga[]
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+model Vaga {
+  id               String        @id @default(cuid())
+  titulo           String
+  empresa          Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  empresaId        String
+  area             String
+  senioridade      String
+  localizacao      String
+  modalidade       String
+  aceitaIniciante  Boolean       @default(false)
+  tecnologias      String[]
+  descricao        String
+  requisitos       String[]
+  beneficios       String[]
+  publicadoEm      DateTime      @default(now())
+  arquivadaEm      DateTime?
+  candidaturas     Candidatura[]
+  criadoEm         DateTime      @default(now())
+  atualizadoEm     DateTime      @updatedAt
+
+  @@index([empresaId])
+  @@index([arquivadaEm, publicadoEm])
+}
+
+model Candidatura {
+  id           String   @id @default(cuid())
+  vaga         Vaga     @relation(fields: [vagaId], references: [id], onDelete: Cascade)
+  vagaId       String
+  candidato    Usuario  @relation(fields: [candidatoId], references: [id], onDelete: Cascade)
+  candidatoId  String
+  habilidades  String[]
+  criadaEm     DateTime @default(now())
+
+  @@unique([vagaId, candidatoId])
+  @@index([candidatoId])
+}

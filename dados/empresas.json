@@ -1,0 +1,14 @@
+[
+  {"id":"techstart-solucoes","nome":"TechStart Soluções","descricao":"Produtos digitais que aproximam tecnologia e negócios.","localizacao":"São Paulo, SP","site":"https://example.com/techstart-solucoes"},
+  {"id":"lequelabs","nome":"LequeLabs","descricao":"Laboratório de produtos web e formação de novos talentos.","localizacao":"Recife, PE","site":"https://example.com/lequelabs"},
+  {"id":"inovatech-software","nome":"InovaTech Software","descricao":"Software sob medida para operações em crescimento.","localizacao":"Florianópolis, SC","site":"https://example.com/inovatech-software"},
+  {"id":"conectavagas","nome":"ConectaVagas","descricao":"Plataforma que conecta pessoas a novas oportunidades.","localizacao":"Belo Horizonte, MG","site":"https://example.com/conectavagas"},
+  {"id":"pagafacil-fintech","nome":"PagaFácil Fintech","descricao":"Infraestrutura de pagamentos simples e segura.","localizacao":"Curitiba, PR","site":"https://example.com/pagafacil-fintech"},
+  {"id":"logirota","nome":"LogiRota","descricao":"Tecnologia de roteirização para operações logísticas.","localizacao":"Campinas, SP","site":"https://example.com/logirota"},
+  {"id":"varejo-mais","nome":"Varejo Mais","descricao":"Rede varejista orientada por dados.","localizacao":"Salvador, BA","site":"https://example.com/varejo-mais"},
+  {"id":"saudeconecta","nome":"SaúdeConecta","descricao":"Conexões digitais entre pacientes e clínicas.","localizacao":"Porto Alegre, RS","site":"https://example.com/saudeconecta"},
+  {"id":"agrosense","nome":"AgroSense","descricao":"Dados e inteligência para o agronegócio.","localizacao":"Goiânia, GO","site":"https://example.com/agrosense"},
+  {"id":"educaapp","nome":"EducaApp","descricao":"Tecnologia para apoiar a educação pública.","localizacao":"Fortaleza, CE","site":"https://example.com/educaapp"},
+  {"id":"movecity","nome":"MoveCity","descricao":"Mobilidade urbana compartilhada.","localizacao":"Rio de Janeiro, RJ","site":"https://example.com/movecity"},
+  {"id":"bitwise-games","nome":"Bitwise Games","descricao":"Estúdio que cria experiências digitais e jogos.","localizacao":"Manaus, AM","site":"https://example.com/bitwise-games"}
+]
