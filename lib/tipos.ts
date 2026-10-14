@@ -1,9 +1,11 @@
+export type Papel = "CANDIDATO" | "EMPRESA";
 export type Area = "Front-end" | "Back-end" | "Full Stack" | "Dados" | "Design" | "Qualidade";
 export type Senioridade = "Estágio" | "Júnior" | "Pleno";
 export type Modalidade = "Remoto" | "Híbrido" | "Presencial";
 
 export interface Vaga {
   id: string;
+  empresaId: string;
   titulo: string;
   empresa: string;
   area: Area;

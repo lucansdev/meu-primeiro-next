@@ -1,19 +1,18 @@
 "use client";
 
 import { useActionState } from "react";
-import type { Empresa, Estado } from "@/lib/tipos";
+import type { Estado } from "@/lib/tipos";
 import { criarVaga } from "@/app/vagas/nova/acoes";
 import BotaoDeEnviar from "./BotaoDeEnviar";
 
 const estadoInicial: Estado = { ok: false, erros: {}, valores: {} };
 const erro = (estado: Estado, campo: string) => estado.erros[campo] && <p className="form-error">{estado.erros[campo]}</p>;
 
-export default function FormularioNovaVaga({ empresas }: { empresas: Empresa[] }) {
+export default function FormularioNovaVaga() {
   const [estado, acao] = useActionState(criarVaga, estadoInicial);
   return (
     <form action={acao} className="vaga-detail-card form-stack">
       <div className="input-group"><label htmlFor="titulo">Título</label><input id="titulo" name="titulo" className="input-control" defaultValue={estado.valores.titulo} />{erro(estado, "titulo")}</div>
-      <div className="input-group"><label htmlFor="empresaId">Empresa</label><select id="empresaId" name="empresaId" className="select-control" defaultValue={estado.valores.empresaId ?? ""}><option value="">Selecione uma empresa</option>{empresas.map((empresa) => <option key={empresa.id} value={empresa.id}>{empresa.nome}</option>)}</select>{erro(estado, "empresaId")}</div>
       <div className="form-grid">
         <div className="input-group"><label htmlFor="area">Área</label><select id="area" name="area" className="select-control" defaultValue={estado.valores.area ?? ""}><option value="">Selecione</option>{["Front-end", "Back-end", "Full Stack", "Dados", "Design", "Qualidade"].map((item) => <option key={item}>{item}</option>)}</select>{erro(estado, "area")}</div>
         <div className="input-group"><label htmlFor="senioridade">Senioridade</label><select id="senioridade" name="senioridade" className="select-control" defaultValue={estado.valores.senioridade ?? ""}><option value="">Selecione</option>{["Estágio", "Júnior", "Pleno"].map((item) => <option key={item}>{item}</option>)}</select>{erro(estado, "senioridade")}</div>

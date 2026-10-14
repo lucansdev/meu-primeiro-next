@@ -13,7 +13,6 @@ const textoObrigatorio = (campo: string) => z.string().trim().min(1, `${campo} �
 
 export const EsquemaDaVaga = z.object({
   titulo: textoObrigatorio("Título").min(3, "Título deve ter ao menos 3 caracteres."),
-  empresaId: textoObrigatorio("Empresa"),
   area: z.enum(["Front-end", "Back-end", "Full Stack", "Dados", "Design", "Qualidade"], { error: "Selecione uma área válida." }),
   senioridade: z.enum(["Estágio", "Júnior", "Pleno"], { error: "Selecione uma senioridade válida." }),
   localizacao: textoObrigatorio("Localização"),
@@ -30,9 +29,25 @@ export const EsquemaDaEmpresa = z.object({
 
 export const EsquemaDaCandidatura = z.object({
   vagaId: textoObrigatorio("Vaga"),
-  nome: textoObrigatorio("Nome").min(3, "Nome deve ter ao menos 3 caracteres."),
-  email: z.email("Informe um e-mail válido."),
   habilidades: z.array(z.string()).min(1, "Selecione ao menos uma habilidade."),
 });
 
 export const EsquemaDeArquivamento = z.object({ id: textoObrigatorio("Vaga") });
+
+export const EsquemaDeCadastro = z
+  .object({
+    nome: textoObrigatorio("Nome").min(3, "Nome deve ter ao menos 3 caracteres."),
+    email: z.email("Informe um e-mail válido."),
+    senha: z.string().min(8, "A senha precisa ter ao menos 8 caracteres."),
+    papel: z.enum(["CANDIDATO", "EMPRESA"]),
+    nomeDaEmpresa: z.string().trim().optional(),
+  })
+  .superRefine((dados, contexto) => {
+    if (dados.papel === "EMPRESA" && !dados.nomeDaEmpresa) {
+      contexto.addIssue({
+        code: "custom",
+        path: ["nomeDaEmpresa"],
+        message: "Informe o nome da empresa.",
+      });
+    }
+  });

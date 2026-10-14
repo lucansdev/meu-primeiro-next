@@ -1,80 +1,79 @@
-import type { Candidatura, Empresa, Vaga } from "@/lib/tipos";
-import vagasLocais from "@/dados/vagas.json";
-import empresasLocais from "@/dados/empresas.json";
+import { prisma } from "@/lib/prisma";
+import type { Empresa, Vaga } from "@/lib/tipos";
 
-const DADOS_URL = (process.env.DADOS_URL ?? "").replace(/\/$/, "");
-const REVALIDACAO_EM_SEGUNDOS = 60 * 60;
-const criadas: Vaga[] = [];
-const arquivadas = new Set<string>();
-const candidaturas: Candidatura[] = [];
-const empresasEditadas = new Map<string, Empresa>();
-const dadosLocais: Record<string, unknown> = {
-  "vagas.json": vagasLocais,
-  "empresas.json": empresasLocais,
-};
+function formatarData(data: Date) {
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" }).format(data);
+}
 
-async function buscarDados<T>(caminho: string, tag: string): Promise<T> {
-  if (!DADOS_URL) {
-    return dadosLocais[caminho] as T;
-  }
+function paraVaga(vaga: {
+  id: string;
+  empresaId: string;
+  titulo: string;
+  area: string;
+  senioridade: string;
+  localizacao: string;
+  modalidade: string;
+  aceitaIniciante: boolean;
+  tecnologias: string[];
+  descricao: string;
+  requisitos: string[];
+  beneficios: string[];
+  publicadoEm: Date;
+  empresa: { nome: string };
+}): Vaga {
+  return {
+    id: vaga.id,
+    empresaId: vaga.empresaId,
+    titulo: vaga.titulo,
+    empresa: vaga.empresa.nome,
+    area: vaga.area as Vaga["area"],
+    senioridade: vaga.senioridade as Vaga["senioridade"],
+    localizacao: vaga.localizacao,
+    modalidade: vaga.modalidade as Vaga["modalidade"],
+    aceitaIniciante: vaga.aceitaIniciante,
+    tecnologias: vaga.tecnologias,
+    descricao: vaga.descricao,
+    requisitos: vaga.requisitos,
+    beneficios: vaga.beneficios,
+    publicadoEm: formatarData(vaga.publicadoEm),
+  };
+}
 
-  const resposta = await fetch(`${DADOS_URL}/${caminho}`, {
-    next: {
-      revalidate: REVALIDACAO_EM_SEGUNDOS,
-      tags: [tag],
-    },
-  });
-
-  if (!resposta.ok) {
-    throw new Error(`Não foi possível carregar ${caminho}: ${resposta.status}`);
-  }
-
-  return resposta.json() as Promise<T>;
+function paraEmpresa(empresa: {
+  id: string;
+  nome: string;
+  descricao: string;
+  localizacao: string;
+  site: string;
+}): Empresa {
+  return empresa;
 }
 
 export async function listarVagas() {
-  const [vagasBase, empresasBase] = await Promise.all([
-    buscarDados<Vaga[]>("vagas.json", "vagas"),
-    buscarDados<Empresa[]>("empresas.json", "empresas"),
-  ]);
-  const nomesAtualizados = new Map(
-    empresasBase.map((empresa) => [empresa.nome, empresasEditadas.get(empresa.id)?.nome ?? empresa.nome]),
-  );
+  const vagas = await prisma.vaga.findMany({
+    where: { arquivadaEm: null },
+    include: { empresa: { select: { nome: true } } },
+    orderBy: { publicadoEm: "desc" },
+  });
 
-  return [...criadas, ...vagasBase]
-    .filter((vaga) => !arquivadas.has(vaga.id))
-    .map((vaga) => ({ ...vaga, empresa: nomesAtualizados.get(vaga.empresa) ?? vaga.empresa }));
+  return vagas.map(paraVaga);
 }
 
 export async function buscarVaga(id: string) {
-  return (await listarVagas()).find((vaga) => vaga.id === id);
-}
+  const vaga = await prisma.vaga.findFirst({
+    where: { id, arquivadaEm: null },
+    include: { empresa: { select: { nome: true } } },
+  });
 
-export const buscarVagaPorId = buscarVaga;
+  return vaga ? paraVaga(vaga) : undefined;
+}
 
 export async function listarEmpresas() {
-  const empresas = await buscarDados<Empresa[]>("empresas.json", "empresas");
-  return empresas.map((empresa) => empresasEditadas.get(empresa.id) ?? empresa);
+  const empresas = await prisma.empresa.findMany({ orderBy: { nome: "asc" } });
+  return empresas.map(paraEmpresa);
 }
 
-export async function buscarEmpresa(id: string) {
-  return (await listarEmpresas()).find((empresa) => empresa.id === id);
-}
-
-export const buscarEmpresaPorId = buscarEmpresa;
-
-export function guardarVaga(vaga: Vaga): void {
-  criadas.unshift(vaga);
-}
-
-export function arquivarVaga(id: string): void {
-  arquivadas.add(id);
-}
-
-export function guardarCandidatura(candidatura: Candidatura): void {
-  candidaturas.push(candidatura);
-}
-
-export function guardarEmpresa(empresa: Empresa): void {
-  empresasEditadas.set(empresa.id, empresa);
+export async function buscarEmpresaPorId(id: string) {
+  const empresa = await prisma.empresa.findUnique({ where: { id } });
+  return empresa ? paraEmpresa(empresa) : undefined;
 }

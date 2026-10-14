@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { arquivarVaga, buscarVaga } from "@/lib/api";
+import { podeGerenciarVaga } from "@/lib/autorizacao";
+import { prisma } from "@/lib/prisma";
 import { errosDeValidacao, EsquemaDeArquivamento } from "@/lib/esquemas";
 import type { Estado } from "@/lib/tipos";
 
@@ -10,12 +11,18 @@ export async function arquivar(_estadoAnterior: Estado, dados: FormData): Promis
   if (!validacao.success) {
     return { ok: false, erros: errosDeValidacao(validacao.error), valores: {} };
   }
-  if (!(await buscarVaga(validacao.data.id))) {
-    return { ok: false, erros: { id: "Esta vaga não está disponível." }, valores: {} };
+
+  if (!(await podeGerenciarVaga(validacao.data.id))) {
+    return { ok: false, erros: {}, valores: {}, mensagem: "Você não pode arquivar esta vaga." };
   }
 
-  arquivarVaga(validacao.data.id);
+  await prisma.vaga.update({
+    where: { id: validacao.data.id },
+    data: { arquivadaEm: new Date() },
+  });
+
   revalidatePath("/vagas");
   revalidatePath(`/vagas/${validacao.data.id}`);
+  revalidatePath("/painel");
   return { ok: true, erros: {}, valores: {}, mensagem: "Vaga arquivada." };
 }
