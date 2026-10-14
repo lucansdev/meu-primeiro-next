@@ -1,5 +1,6 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { podeEditarEmpresa } from "@/lib/autorizacao";
 import { prisma } from "@/lib/prisma";
@@ -20,7 +21,14 @@ export async function salvarEmpresa(slug: string, _estadoAnterior: Estado, dados
     return { ok: false, erros: {}, valores, mensagem: "Você não pode editar esta empresa." };
   }
 
-  await prisma.empresa.update({ where: { id: slug }, data: validacao.data });
+  try {
+    await prisma.empresa.update({ where: { id: slug }, data: validacao.data });
+  } catch (erro) {
+    if (erro instanceof Prisma.PrismaClientKnownRequestError && erro.code === "P2002") {
+      return { ok: false, erros: { nome: "Já existe uma empresa com este nome." }, valores };
+    }
+    throw erro;
+  }
   revalidatePath("/empresas");
   revalidatePath(`/empresas/${slug}`);
   revalidatePath(`/empresas/${slug}/editar`);

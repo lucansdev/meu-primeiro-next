@@ -24,7 +24,7 @@ export const EsquemaDaVaga = z.object({
 export const EsquemaDaEmpresa = z.object({
   nome: textoObrigatorio("Nome").min(2, "Nome deve ter ao menos 2 caracteres."),
   descricao: textoObrigatorio("Sobre").min(20, "Sobre deve ter ao menos 20 caracteres.").max(500, "Sobre deve ter no máximo 500 caracteres."),
-  site: z.url("Site deve ser uma URL válida."),
+  site: z.url({ protocol: /^https?$/, error: "Informe um site com http:// ou https://." }),
 });
 
 export const EsquemaDaCandidatura = z.object({
@@ -34,11 +34,14 @@ export const EsquemaDaCandidatura = z.object({
 
 export const EsquemaDeArquivamento = z.object({ id: textoObrigatorio("Vaga") });
 
+export const EsquemaDaSenha = z.string().min(8, "A senha precisa ter ao menos 8 caracteres.")
+  .refine((senha) => new TextEncoder().encode(senha).length <= 72, "A senha deve ter no máximo 72 bytes.");
+
 export const EsquemaDeCadastro = z
   .object({
     nome: textoObrigatorio("Nome").min(3, "Nome deve ter ao menos 3 caracteres."),
     email: z.email("Informe um e-mail válido."),
-    senha: z.string().min(8, "A senha precisa ter ao menos 8 caracteres."),
+    senha: EsquemaDaSenha,
     papel: z.enum(["CANDIDATO", "EMPRESA"]),
     nomeDaEmpresa: z.string().trim().optional(),
   })

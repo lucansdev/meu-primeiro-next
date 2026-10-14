@@ -47,7 +47,7 @@ function paraEmpresa(empresa: {
   localizacao: string;
   site: string;
 }): Empresa {
-  return empresa;
+  return { id: empresa.id, nome: empresa.nome, descricao: empresa.descricao, localizacao: empresa.localizacao, site: empresa.site };
 }
 
 export async function listarVagas() {

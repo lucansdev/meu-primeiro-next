@@ -1,5 +1,6 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { exigirPapel } from "@/lib/autorizacao";
 import { prisma } from "@/lib/prisma";
@@ -18,31 +19,36 @@ export async function enviarCandidatura(_estadoAnterior: Estado, dados: FormData
   }
 
   const sessao = await exigirPapel("CANDIDATO");
-  const vaga = await prisma.vaga.findFirst({
-    where: { id: validacao.data.vagaId, arquivadaEm: null },
-    select: { id: true },
-  });
+  try {
+    const disponivel = await prisma.$transaction(async (transacao) => {
+      // O arquivamento atualiza a mesma linha e aguarda este bloqueio.
+      const vagas = await transacao.$queryRaw<{ id: string }[]>`
+        SELECT "id" FROM "Vaga"
+        WHERE "id" = ${validacao.data.vagaId} AND "arquivadaEm" IS NULL
+        FOR UPDATE
+      `;
+      if (vagas.length === 0) return false;
 
-  if (!vaga) {
-    return { ok: false, erros: { vagaId: "Esta vaga não está mais disponível." }, valores };
+      await transacao.candidatura.create({
+        data: {
+          vagaId: validacao.data.vagaId,
+          candidatoId: sessao.user.id,
+          habilidades: validacao.data.habilidades,
+        },
+      });
+      return true;
+    });
+    if (!disponivel) {
+      return { ok: false, erros: { vagaId: "Esta vaga não está mais disponível." }, valores };
+    }
+  } catch (erro) {
+    if (erro instanceof Prisma.PrismaClientKnownRequestError && erro.code === "P2002") {
+      return { ok: false, erros: { vagaId: "Você já se candidatou a esta vaga." }, valores };
+    }
+    throw erro;
   }
 
-  const existente = await prisma.candidatura.findUnique({
-    where: { vagaId_candidatoId: { vagaId: vaga.id, candidatoId: sessao.user.id } },
-  });
-  if (existente) {
-    return { ok: false, erros: { vagaId: "Você já se candidatou a esta vaga." }, valores };
-  }
-
-  await prisma.candidatura.create({
-    data: {
-      vagaId: vaga.id,
-      candidatoId: sessao.user.id,
-      habilidades: validacao.data.habilidades,
-    },
-  });
-
-  revalidatePath(`/vagas/${vaga.id}`);
+  revalidatePath(`/vagas/${validacao.data.vagaId}`);
   revalidatePath("/painel");
   return { ok: true, erros: {}, valores: {}, mensagem: "Candidatura registrada com sucesso." };
 }
